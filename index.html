@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Railway Booking</title>
+</head>
+<body>
+  <input type="text" id="source" placeholder="Source">
+  <input type="text" id="destination" placeholder="Destination">
+  <button onclick="fetchTrains()">Search Trains</button>
+
+  <div id="train-list"></div>
+
+  <script>
+    function fetchTrains() {
+      const source = document.getElementById('source').value;
+      const destination = document.getElementById('destination').value;
+
+      fetch(`/trains?source=${source}&destination=${destination}`)
+        .then(response => response.json())
+        .then(data => {
+          const trainList = document.getElementById('train-list');
+          trainList.innerHTML = '';
+
+          data.forEach(train => {
+            const li = document.createElement('li');
+            li.textContent = `${train.train_number} - ${train.source} to ${train.destination} - Available Seats: ${train.available_seats}`;
+            trainList.appendChild(li);
+          });
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  </script>
+</body>
+</html>
